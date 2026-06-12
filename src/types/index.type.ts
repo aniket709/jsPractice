@@ -1,0 +1,5 @@
+
+interface createUserBody{
+    
+    url:string
+}
