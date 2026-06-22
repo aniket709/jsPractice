@@ -48,7 +48,6 @@ router.get("/:code", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     if (!record) {
         return res.status(404).json({ message: "Not found" });
     }
-    // ⏱️ check expiry (10 minutes example)
     const now = new Date();
     const createdAt = record.createdAt;
     const diffInMinutes = (now.getTime() - createdAt.getTime()) / (1000 * 60);
@@ -59,14 +58,12 @@ router.get("/:code", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
         return res.status(410).json({ message: "URL expired" });
     }
-    // ✅ increment clicks
     yield prisma.url.update({
         where: { shortCode: code },
         data: {
             clicks: { increment: 1 },
         },
     });
-    // redirect
     return res.redirect(record.originalUrl);
 }));
 exports.default = router;
